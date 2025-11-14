@@ -1,5 +1,5 @@
 
-# Walton
+# <img width="80" alt="1856d70d-efc8-4cde-bc43-4f6c8fe475fa" src="https://github.com/user-attachments/assets/5cd9f0da-b95f-4fb2-a50d-9b6cbd72eff2" /> Walton
 
 **Walton** aiuta gli sviluppatori a monitorare le repository GitHub utilizzate come dipendenze nei loro progetti, segnalando quando una repo non è più supportata o aggiornata.
 
@@ -8,8 +8,6 @@
 ### 🚧 In Sviluppo
 - [ ] Tracking repository utilizzate come dipendenze
 - [ ] Job automatici per controllo repositories
-
-
 
 ### In futuro
 - Autenticazione GitHub - Login sicuro tramite OAuth GitHub
