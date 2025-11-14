@@ -1,19 +1,19 @@
-<div class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen"> 
-    <div class="bg-white shadow-sm border-b border-slate-200">
+<div class="bg-gradient-to-br from-stone-50 to-stone-100 min-h-screen"> 
+    <div class="bg-white shadow-sm border-b border-stone-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-slate-800">
-                        <i class="fab fa-github mr-3 text-slate-600"></i>
+                    <h1 class="text-3xl font-bold text-stone-800">
+                        <i class="fab fa-github mr-3 text-stone-600"></i>
                         Repositories
                     </h1>
-                    <p class="text-slate-600 mt-1">Gestisci i tuoi progetti e repository</p>
+                    <p class="text-stone-600 mt-1">Gestisci i tuoi progetti e repository</p>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+                    <div class="bg-stone-50 text-stone-700 px-4 py-2 rounded-full text-sm font-medium">
                         <%= @repositories.count %> repositories
                     </div>
-                    <%= link_to new_repository_path, class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2" do %>
+                    <%= link_to new_repository_path, class: "bg-stone-600 hover:bg-stone-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2" do %>
                         <i class="fas fa-plus"></i>
                         <span>Nuovo Repository</span>
                     <% end %>
@@ -26,23 +26,23 @@
         <% if @repositories.any? %>
             <div class="space-y-3">
                 <% @repositories.each do |repository| %>
-                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-slate-200 hover:border-slate-300 <%= 'opacity-75' if repository.archived %>">
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-stone-200 hover:border-stone-300 <%= 'opacity-75' if repository.archived %>">
                         <div class="p-6">
                             <div class="flex items-center justify-between">
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center space-x-3">
                                         <div class="flex-shrink-0">
-                                            <div class="w-10 h-10 bg-gradient-to-br <%= repository.archived ? 'from-slate-400 to-slate-500' : 'from-blue-500 to-blue-600' %> rounded-lg flex items-center justify-center">
+                                            <div class="w-10 h-10 bg-gradient-to-br <%= repository.archived ? 'from-stone-400 to-stone-500' : 'from-stone-500 to-stone-600' %> rounded-lg flex items-center justify-center">
                                                 <i class="<%= repository.archived ? 'fas fa-archive' : 'fas fa-code-branch' %> text-white text-sm"></i>
                                             </div>
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <div class="flex items-center space-x-2">
-                                                <h3 class="text-lg font-semibold <%= repository.archived ? 'text-slate-600' : 'text-slate-800' %> truncate">
+                                                <h3 class="text-lg font-semibold <%= repository.archived ? 'text-stone-600' : 'text-stone-800' %> truncate">
                                                     <%= repository.title %>
                                                 </h3>
                                                 <% if repository.archived %>
-                                                    <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full font-medium">
+                                                    <span class="bg-stone-100 text-stone-600 text-xs px-2 py-1 rounded-full font-medium">
                                                         Archiviato
                                                     </span>
                                                 <% else %>
@@ -52,11 +52,11 @@
                                                 <% end %>
                                             </div>
                                             <% if repository.description.present? %>
-                                                <p class="<%= repository.archived ? 'text-slate-500' : 'text-slate-600' %> text-sm mt-1 line-clamp-2">
+                                                <p class="<%= repository.archived ? 'text-stone-500' : 'text-stone-600' %> text-sm mt-1 line-clamp-2">
                                                     <%= truncate(repository.description, length: 120) %>
                                                 </p>
                                             <% else %>
-                                                <p class="text-slate-400 text-sm mt-1 italic">
+                                                <p class="text-stone-400 text-sm mt-1 italic">
                                                     Nessuna descrizione disponibile
                                                 </p>
                                             <% end %>
@@ -66,19 +66,19 @@
 
                                 <div class="hidden md:flex items-center space-x-6 mx-8">
                                     <div class="text-center">
-                                        <div class="text-sm <%= repository.archived ? 'text-slate-400' : 'text-slate-500' %>">Ultimo commit</div>
-                                        <div class="text-sm font-medium <%= repository.archived ? 'text-slate-500' : 'text-slate-800' %>">
+                                        <div class="text-sm <%= repository.archived ? 'text-stone-400' : 'text-stone-500' %>">Ultimo commit</div>
+                                        <div class="text-sm font-medium <%= repository.archived ? 'text-stone-500' : 'text-stone-800' %>">
                                             <% if repository.last_commit_at.present? %>
-                                                <%= time_ago_in_words(repository.last_commit_at) %> fa
+                                                <%= time_ago_in_words(repository.last_commit_at) %> ago
                                             <% else %>
-                                                <span class="text-slate-400">-</span>
+                                                <span class="text-stone-400">-</span>
                                             <% end %>
                                         </div>
                                     </div>
-                                    <div class="h-8 w-px bg-slate-200"></div>
+                                    <div class="h-8 w-px bg-stone-200"></div>
                                     <div class="text-center">
-                                        <div class="text-sm <%= repository.archived ? 'text-slate-400' : 'text-slate-500' %>">ID</div>
-                                        <div class="text-sm font-medium <%= repository.archived ? 'text-slate-500' : 'text-slate-800' %>">
+                                        <div class="text-sm <%= repository.archived ? 'text-stone-400' : 'text-stone-500' %>">ID</div>
+                                        <div class="text-sm font-medium <%= repository.archived ? 'text-stone-500' : 'text-stone-800' %>">
                                             #<%= repository.id %>
                                         </div>
                                     </div>
@@ -86,11 +86,11 @@
 
                                 <div class="flex items-center space-x-3">
                                     <% if repository.url.present? %>
-                                        <%= link_to repository.url, target: "_blank", class: "#{repository.archived ? 'text-slate-400 hover:text-slate-500' : 'text-blue-600 hover:text-blue-700'} p-2 hover:bg-blue-50 rounded-lg transition-colors duration-200" do %>
+                                        <%= link_to repository.url, target: "_blank", class: "#{repository.archived ? 'text-stone-400 hover:text-stone-500' : 'text-stone-600 hover:text-stone-700'} p-2 hover:bg-stone-50 rounded-lg transition-colors duration-200" do %>
                                             <i class="fas fa-external-link-alt"></i>
                                         <% end %>
                                     <% end %>
-                                    <%= link_to repository_path(repository), class: "flex items-center px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" do %>
+                                    <%= link_to repository_path(repository), class: "flex items-center px-4 py-2 text-sm text-stone-700 hover:bg-stone-50" do %>
                                       <i class="fas fa-eye mr-2"></i>
                                       Visualizza
                                     <% end %>
@@ -103,11 +103,11 @@
         <% else %>
             <!-- Empty State -->
             <div class="text-center py-12">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 py-12">
-                    <i class="fas fa-folder-open text-slate-300 text-6xl mb-4"></i>
-                    <h3 class="text-xl font-semibold text-slate-600 mb-2">Nessun repository trovato</h3>
-                    <p class="text-slate-500 mb-6">Inizia creando il tuo primo repository.</p>
-                    <%= link_to new_repository_path, class: "bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 inline-flex items-center space-x-2" do %>
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 py-12">
+                    <i class="fas fa-folder-open text-stone-300 text-6xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-stone-600 mb-2">Nessun repository trovato</h3>
+                    <p class="text-stone-500 mb-6">Inizia creando il tuo primo repository.</p>
+                    <%= link_to new_repository_path, class: "bg-stone-600 hover:bg-stone-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 inline-flex items-center space-x-2" do %>
                         <i class="fas fa-plus"></i>
                         <span>Crea Repository</span>
                     <% end %>

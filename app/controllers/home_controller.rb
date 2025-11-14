@@ -8,6 +8,7 @@ class HomeController < ApplicationController
 
       redirect_to repositories_path
     else
+      @waiting = Waiting.new
       render :landing
     end
   end

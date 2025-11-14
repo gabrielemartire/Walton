@@ -10,9 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_08_083003) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_14_185557) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "notes", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.bigint "repository_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_notes_on_repository_id"
+    t.index ["user_id"], name: "index_notes_on_user_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "nome", null: false
+    t.string "url"
+    t.text "descrizione"
+    t.bigint "repositories_id", null: false
+    t.bigint "users_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["nome"], name: "index_organizations_on_nome"
+    t.index ["repositories_id"], name: "index_organizations_on_repositories_id"
+    t.index ["users_id"], name: "index_organizations_on_users_id"
+  end
 
   create_table "repositories", force: :cascade do |t|
     t.string "title"
@@ -55,4 +79,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_08_083003) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "notes", "repositories"
+  add_foreign_key "notes", "users"
+  add_foreign_key "organizations", "repositories", column: "repositories_id"
+  add_foreign_key "organizations", "users", column: "users_id"
 end

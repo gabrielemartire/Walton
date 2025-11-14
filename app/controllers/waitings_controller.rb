@@ -23,6 +23,7 @@ class WaitingsController < ApplicationController
   # POST /waitings or /waitings.json
   def create
     @waiting = Waiting.new(waiting_params)
+    puts "ciaoooidoasids"
 
     respond_to do |format|
       if @waiting.save

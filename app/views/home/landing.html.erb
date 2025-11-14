@@ -1,37 +1,189 @@
+    <style>
+      .walton-font {
+  font-family: "Kiwi Maru", serif;
+        font-weight: 400;
+        font-style: normal;
+        color: #92400e;
+      }
+    </style>
+
+
 <div>
   <!-- Hero Section -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
     <div class="text-center">
       <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
-        <span class="block text-blue-600">La piazza</span>
-        <span class="block">dei repository GitHub</span>
+        <span class="block"><span class="walton-font">Walton’s Ark</span></span>
       </h1>
-      <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-500">
-        Tieni traccia dei tuoi progetti preferiti, scopri quando vengono abbandonati e aiuta a mantenere vivo l'ecosistema open source. Una community per sviluppatori che si prendono cura dei progetti che usano.
+      <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-600">
+        Monitor GitHub repositories, receive notifications when projects become inactive and collaborate with the community to preserve valuable open source projects. <br> Not all treasures are gold, some are made of code.
       </p>
     </div>
   </div>
 
   <!-- Features Section -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="text-center p-6 bg-white rounded-lg shadow-sm">
-        <div class="text-4xl mb-4"><i class="fa-solid fa-code-branch"></i></div>
-        <h3 class="text-xl font-semibold mb-2">Monitora l'attività</h3>
-        <p class="text-gray-600 mb-4">Tieni traccia degli ultimi commit, release e attività sui repository che ti interessano. Ricevi notifiche quando un progetto diventa inattivo.</p>
+
+  </div>
+
+  <!-- How does Walton’s Ark work? -->
+  <div class="bg-gradient-to-r from-amber-800 to-stone-700 py-20 rounded-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-white sm:text-4xl">
+          How does Walton’s Ark work?
+        </h2>
+        <p class="mt-4 text-xl text-amber-100">
+          A simple and effective process to safeguard the open source ecosystem
+        </p>
       </div>
       
-      <div class="text-center p-6 bg-white rounded-lg shadow-sm">
-        <div class="text-4xl mb-4"><i class="fa-solid fa-people-carry-box"></i></div>
-        <h3 class="text-xl font-semibold mb-2">Community attiva</h3>
-        <p class="text-gray-600 mb-4">Connettiti con altri sviluppatori, condividi progetti interessanti e collabora per mantenere vivi i repository abbandonati.</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+            <div class="w-24 h-24 bg-gradient-to-br from-amber-700 to-amber-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <i class="fa-solid fa-compass text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Automatic monitoring</h3>
+            <p class="text-gray-600 mb-4">Follow repositories you're interested in. The system will immediately start tracking it. Automatically detect when a project starts showing signs of abandonment.</p>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+            <div class="w-24 h-24 bg-gradient-to-br from-yellow-700 to-yellow-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <i class="fa-solid fa-people-carry-box text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Collaborative community</h3>
+            <p class="text-gray-600 mb-4">Connect with other developers to coordinate forks, take over maintenance or transfer project ownership..</p>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+            <div class="w-24 h-24 bg-gradient-to-br from-slate-700 to-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <i class="fa-solid fa-archive text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Digital preservation</h3>
+            <p class="text-gray-600 mb-4">Save valuable projects from permanent loss. Every digital artifact deserves to be preserved for future generations of developers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Join the Waiting List Section -->
+  <div class="bg-stone-900 py-20 rounded-2xl my-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <div class="w-32 h-32 bg-gradient-to-br from-amber-600 to-amber-800 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl">
+          <i class="fa-solid fa-map text-5xl text-white"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-white mb-4">Join the Waiting List</h2>
+        <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+          Be among the first to know when Walton’s Ark launches and start protecting the projects that matter to you.
+        </p>
+        
+        <!-- Form Section -->
+        <div class="max-w-md mx-auto">
+          <form class="space-y-6">
+            <!-- Error handling (would be populated by server-side logic) -->
+            <div id="error_explanation" class="bg-red-900 border border-red-600 text-red-200 px-4 py-3 rounded-lg hidden">
+              <div class="flex items-center">
+                <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                <div>
+                  <h3 class="font-medium">Please fix the following errors:</h3>
+                  <ul class="list-disc ml-5 mt-2">
+                    <li>Email is required</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <input 
+                type="email" 
+                id="email" 
+                name="waiting[email]" 
+                required
+                class="block w-full px-6 py-4 text-gray-900 placeholder-gray-500 bg-white border-0 rounded-lg shadow-lg focus:ring-4 focus:ring-amber-200 focus:ring-opacity-50 transition-all duration-200 text-lg"
+                placeholder="Enter your email address"
+              >
+            </div>
+
+            <button 
+              type="submit" 
+              class="w-full bg-amber-700 hover:bg-amber-800 text-white px-8 py-4 rounded-lg font-semibold transition-colors text-lg"
+            >
+              Join the Waiting List
+            </button>
+            
+            <p class="text-center text-gray-400 text-sm">
+              <i class="fa-solid fa-shield-halved mr-1"></i>
+              We'll only send you launch updates. No spam, ever.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Concrete results 
+  <div class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl mb-4">
+          Concrete results
+        </h2>
+        <p class="text-xl text-gray-600">Through Walton’s Ark, the community has already saved numerous valuable projects</p>
       </div>
       
-      <div class="text-center p-6 bg-white rounded-lg shadow-sm">
-        <div class="text-4xl mb-4"><i class="fa-regular fa-heart text-red"></i></div>
-        <h3 class="text-xl font-semibold mb-2">Salva l'open source</h3>
-      <p class="text-gray-600 mb-4">Quando un maintainer abbandona un progetto, la community può organizzarsi per continuare lo sviluppo e mantenere il progetto attivo.</p>
+      <div class="grid md:grid-cols-3 gap-12">
+        <div class="text-center">
+          <div class="w-24 h-24 bg-gradient-to-br from-amber-700 to-amber-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <i class="fa-solid fa-database text-3xl text-white"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">2,847</h3>
+          <p class="text-gray-600 text-lg">Monitored repositories</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-24 h-24 bg-gradient-to-br from-stone-600 to-stone-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <i class="fa-solid fa-code-branch text-3xl text-white"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">156</h3>
+          <p class="text-gray-600 text-lg">Recovered projects</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="w-24 h-24 bg-gradient-to-br from-yellow-600 to-orange-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <i class="fa-solid fa-users text-3xl text-white"></i>
+          </div>
+          <h3 class="text-3xl font-bold text-gray-900 mb-2">1,203</h3>
+          <p class="text-gray-600 text-lg">Active developers</p>
+        </div>
       </div>
+    </div>
+  </div>-->
+
+  <!-- Start today -->
+  <div class="bg-stone-900 py-10 rounded-2xl">
+      <!-- Have questions or suggestions? -->
+      <div class="text-center">
+        <p class="text-stone-400 mb-4">Have questions or suggestions?</p>
+        <div class="flex justify-center space-x-6">
+          <a href="mailto:hello@walton.dev" class="text-amber-400 hover:text-amber-300 flex items-center transition-colors">
+            <i class="fa-solid fa-envelope mr-2"></i>
+            gabriele.martire@gmail.com
+          </a>
+          <a href="https://github.com/walton" class="text-amber-400 hover:text-amber-300 flex items-center transition-colors">
+            <i class="fa-brands fa-github mr-2"></i>
+            /walton
+          </a>
+          <a href="<%= about_path%>" class="text-amber-400 hover:text-amber-300 flex items-center transition-colors">
+            <i class="fa-solid fa-magnifying-glass mr-2"></i>
+            FAQ
+          </a>
+        </div>
     </div>
   </div>
 </div>

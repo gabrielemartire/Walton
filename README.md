@@ -1,23 +1,15 @@
 
-<img width="400" alt="c5b5d917-0699-416a-ac02-a8dccb829f54" src="https://github.com/user-attachments/assets/a756f627-663c-49cc-b4f3-890693c1ee8c" />
+# Walton
 
-# REPO|PLAZA
-
-**Repo Plaza** aiuta gli sviluppatori a monitorare le repository GitHub utilizzate come dipendenze nei loro progetti, segnalando quando una repo non è più supportata o aggiornata.
-
-## Demo Live
-
-- **Produzione**: [repoplaza-production.up.railway.app](http://repoplaza-production.up.railway.app/)
-
-|user|psw|note|
-|--|--|--|
-|demo@domain.it|password|account demo|
+**Walton** aiuta gli sviluppatori a monitorare le repository GitHub utilizzate come dipendenze nei loro progetti, segnalando quando una repo non è più supportata o aggiornata.
 
 ## Roadmap
 
 ### 🚧 In Sviluppo
 - [ ] Tracking repository utilizzate come dipendenze
 - [ ] Job automatici per controllo repositories
+
+
 
 ### In futuro
 - Autenticazione GitHub - Login sicuro tramite OAuth GitHub
@@ -30,7 +22,7 @@
 
 1. **Collega il tuo GitHub**: Autenticati con il tuo account GitHub.
 2. **Aggiungi Dipendenze**: Specifica quali repository vuoi monitorare (es. rails/rails, facebook/react).
-3. **Ricevi Notifiche**: Repo Plaza ti avvisa quando una repository di tuo interesse non riceve piu aggiornamenti.
+3. **Ricevi Notifiche**: Walton ti avvisa quando una repository di tuo interesse non riceve piu aggiornamenti.
 
 ## Tecnologie Utilizzate
 
@@ -117,4 +109,17 @@ Progetto sotto licenza MIT - vedi `LICENSE` per dettagli.
 
 ---
 
-**Repo Plaza**
+**Walton**
+
+## DB
+
+Repo 
+Repo n-to-n Org // una repo puo essere in piu Org
+Repo n-to-n User // una repo puo essere in piu profili utenti
+Org
+Org n-to-n User // un utente puo avere piu Org
+User
+Recoveries (id_repo, id_user)
+Comment (id_repo)
+User n-to-n Comment
+
