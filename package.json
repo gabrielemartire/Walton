@@ -1,0 +1,24 @@
+{
+  "name": "nodenode",
+  "version": "1.0.0",
+  "main": "ASYNC.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@payloadcms/next": "3.49.0",
+    "@payloadcms/richtext-lexical": "3.49.0",
+    "@payloadcms/ui": "3.49.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "16.4.7",
+    "sharp": "0.34.2",
+    "@payloadcms/db-postgres": "3.49.0"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
+}

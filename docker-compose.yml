@@ -1,16 +1,14 @@
-version: '3.8'
-
+version: '2'
 services:
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: repo_plaza_development
-      POSTGRES_USER: repo_plaza
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
+  linuxmachine:
+    container_name: linux-machinegun
+    image: node:20-alpine
+    working_dir: /app
+    ports: 
+      - 4000:4000
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
+      - ./:/app
+    stdin_open: true # Mantiene stdin aperto
+    tty: true        # Alloca pseudo-TTY
+    command: sh      # Shell interattiva
+    restart: unless-stopped
