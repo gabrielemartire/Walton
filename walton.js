@@ -12,12 +12,12 @@ async function getNpmPackageInfo() {
 
         console.log('╔═══════════════════════════════════════════════════════════╗');
         console.log('║                                                           ║');
-        console.log('║                  Walton at your service!                  ║');
+        console.log('║                        WALTON                             ║');
         console.log('║                                                           ║');
-        console.log('║     Analyzing npm packages with distinguished taste...    ║');
+        console.log('║     Excavating your node_modules for lost artifacts...    ║');
         console.log('║                                                           ║');
         console.log('╚═══════════════════════════════════════════════════════════╝');
-        console.log('ರ⌓ರೃ Walton founds this deps', deps)
+        console.log('Walton founds this deps', deps)
 
         let arrayDeps = []
 
@@ -45,7 +45,7 @@ async function getNpmPackageInfo() {
                 const { repoUrl, forksCount } = await infoRepoGithub(githubPath)
                 forks = `in '${repoUrl}' we found ${forksCount} forks`
             } else {
-                forks = `◕_ರೃ Walton say it's ok`
+                forks = `Walton say it's ok`
             }
             const info = {
                 name: data?.name || 'UNK',
