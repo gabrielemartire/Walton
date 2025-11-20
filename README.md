@@ -114,12 +114,48 @@ Currently, Walton uses these defaults:
 
 ## Roadmap
 
-- [ ] Configurable staleness threshold
-- [ ] Custom fork rating weights
-- [ ] Output to GitHub PR comments
-- [ ] Badge generation for README
-- [ ] Slack/Discord notifications
-- [ ] Support for yarn.lock and pnpm-lock.yaml
+### 🎯 Core Improvements
+
+- [ ] **Better fork ranking system** - Improve the algorithm with additional metrics (commit frequency, contributor activity, release cadence, test coverage)
+- [ ] **Smarter staleness detection** - Better evaluation of when a repo is truly abandoned vs just stable (consider release history, issue response time, PR merge rate)
+- [ ] **API optimization** - Implement caching, batch requests, and rate limiting handling to reduce API calls
+- [ ] **Configurable staleness threshold** - Allow users to set custom time thresholds
+- [ ] **GITHUB_TOKEN** - Allow users to use GITHUB_TOKEN
+
+### 📊 Output & Reporting
+
+- [ ] **Enhanced console output** - Better formatted tables, colors, progress indicators, and summary statistics
+- [ ] **Output to GitHub PR comments** - Auto-comment on PRs with dependency health reports
+- [ ] **Badge generation for README** - Show dependency health status badge
+- [ ] **Multiple output formats** - Support JSON, Markdown, and HTML reports
+- [ ] **Historical tracking** - Track dependency health over time with trends
+
+### 🔧 Integrations & Workflows
+
+- [ ] **GitHub Action improvements** - Better workflow templates and examples for different use cases
+- [ ] **Slack/Discord notifications** - Send alerts when stale dependencies are detected
+- [ ] **Dependabot/Renovate integration** - Coordinate with existing dependency update tools
+- [ ] **CI/CD pipeline integration** - Fail builds when critical dependencies are stale
+
+### 🤝 Community Features
+
+- [ ] **Maintainer proposal generator** - Generate standard issue templates to propose as new maintainers
+- [ ] **Fork discovery helper** - Create links to announce official forks in original repositories
+- [ ] **Community fork registry** - Track and suggest community-maintained forks for popular abandoned packages
+
+### 📦 Package Manager Support
+
+- [ ] **yarn.lock and pnpm-lock.yaml support** - Analyze lock files for accurate dependency trees
+- [ ] **Monorepo support** - Handle workspaces and multiple package.json files
+- [ ] **devDependencies filtering** - Separate analysis for dev vs production dependencies
+- [ ] **Peer dependencies analysis** - Check health of peer dependency requirements
+
+### 🛡️ Reliability & Performance
+
+- [ ] **GitHub rate limiting handling** - Graceful degradation when API limits are reached
+- [ ] **Result caching** - Cache analysis results to speed up subsequent runs
+- [ ] **Exclude list** - Allow users to ignore specific packages (known false positives)
+- [ ] **Parallel processing** - Analyze multiple packages concurrently
 
 ## Contributing
 
@@ -141,4 +177,4 @@ MIT License - see `LICENSE` for details.
 
 ---
 
-*Named after Henry **Walton** Jones Jr. - because great adventures start with knowing what you're working with.*
+*Named after Henry **Walton** "Indiana" Jones Jr. - because great adventures start with knowing what you're working with.*
