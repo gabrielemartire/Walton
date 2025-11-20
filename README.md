@@ -1,123 +1,144 @@
 
-# <img width="80" alt="1856d70d-efc8-4cde-bc43-4f6c8fe475fa" src="https://github.com/user-attachments/assets/5cd9f0da-b95f-4fb2-a50d-9b6cbd72eff2" /> Walton
+# <img width="80" alt="Walton Logo" src="https://github.com/user-attachments/assets/5cd9f0da-b95f-4fb2-a50d-9b6cbd72eff2" /> Walton
 
-**Walton** aiuta gli sviluppatori a monitorare le repository GitHub utilizzate come dipendenze nei loro progetti, segnalando quando una repo non è più supportata o aggiornata.
+> *"It belongs in a museum... unless it's still maintained."*
+
+**Walton** is a GitHub Action that analyzes your npm dependencies and hunts for better-maintained forks when packages go stale. Like its namesake (Indiana Jones' middle name), it digs through your project's artifacts to unearth hidden treasures.
+
+## What it does
+
+Walton reads your `package.json`, fetches information from the npm registry, and for each dependency:
+
+- Checks when the package was last updated
+- Flags packages that haven't been updated in more than 10 days as "old"
+- For old packages, searches GitHub for active forks
+- Rates forks based on stars, watchers, issues, discussions, and more
+- Provides a summary table of your dependencies' health
+
+## Usage
+
+### Add Walton to your repository
+
+Create a workflow file in your repository at `.github/workflows/walton.yml`:
+
+```yaml
+name: Walton Dependency Check
+
+on:
+  # Run on push to main branch
+  push:
+    branches: [main]
+  # Run weekly on Monday at 9am
+  schedule:
+    - cron: '0 9 * * 1'
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  check-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Walton
+        uses: gabrielemartire/walton@main
+```
+
+### Example Output
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║                  Walton at your service!                  ║
+║                                                           ║
+║     Analyzing npm packages with distinguished taste...    ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+
+====Walton's resume====
+┌─────────┬──────────────────────┬─────────┬────────────┬─────────┬────────────┐
+│ (index) │ name                 │ latest  │ LastUpdate │ license │ waltonSays │
+├─────────┼──────────────────────┼─────────┼────────────┼─────────┼────────────┤
+│ 0       │ 'react'              │ '18.2.0'│ '11/15/24' │ 'MIT'   │ 'its ok'   │
+│ 1       │ 'lodash'             │ '4.17.21'│ '3/15/23' │ 'MIT'   │ 'its old!' │
+└─────────┴──────────────────────┴─────────┴────────────┴─────────┴────────────┘
+```
+
+For packages marked as "old", Walton also shows a table of promising forks with ratings.
+
+## Fork Rating System
+
+Walton rates forks based on:
+
+| Factor | Weight |
+|--------|--------|
+| Stars | ×5 |
+| Watchers | ×3 |
+| Forks | ×2 |
+| Has Wiki | +2 |
+| Has Discussions | +3 |
+| Open Issues | +5 |
+
+Archived or disabled forks receive a rating of 0 and are filtered out.
+
+## Requirements
+
+- A `package.json` file in your repository root with npm dependencies
+- Node.js 20+ (handled by the action)
+
+## How It Works
+
+1. Reads dependencies from your `package.json`
+2. Fetches package metadata from the npm registry
+3. Checks the last modified date for each package
+4. For packages older than 10 days:
+   - Queries GitHub API for the repository info
+   - Fetches and analyzes forks
+   - Calculates ratings for active forks
+5. Outputs a summary table with recommendations
+
+## Configuration
+
+Currently, Walton uses these defaults:
+
+- **Staleness threshold**: 10 days without updates
+- **Minimum fork rating**: 5 (forks below this are filtered)
+
+*Custom configuration options coming soon!*
 
 ## Roadmap
 
-### 🚧 In Sviluppo
-- [ ] Tracking repository utilizzate come dipendenze
-- [ ] Job automatici per controllo repositories
+- [ ] Configurable staleness threshold
+- [ ] Custom fork rating weights
+- [ ] Output to GitHub PR comments
+- [ ] Badge generation for README
+- [ ] Slack/Discord notifications
+- [ ] Support for yarn.lock and pnpm-lock.yaml
 
-### In futuro
-- Autenticazione GitHub - Login sicuro tramite OAuth GitHub
-- Sistema notifiche email
-- Miglioramento della Dashboard per visualizzare lo stato di tutte le dipendenze in un colpo d'occhio
-- API REST per integrazioni esterne
-- Report analytics sulle dipendenze
+## Contributing
 
-## 🛠️ Come Funziona
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-1. **Collega il tuo GitHub**: Autenticati con il tuo account GitHub.
-2. **Aggiungi Dipendenze**: Specifica quali repository vuoi monitorare (es. rails/rails, facebook/react).
-3. **Ricevi Notifiche**: Walton ti avvisa quando una repository di tuo interesse non riceve piu aggiornamenti.
+## License
 
-## Tecnologie Utilizzate
+MIT License - see `LICENSE` for details.
 
-### Backend
-- **Ruby on Rails** - Framework web principale
-- **PostgreSQL** - Database per tracking dipendenze
-- **Devise** - Sistema di autenticazione
-
-### Frontend
-- **Tailwind CSS** - Styling moderno e responsive
-
-## Prerequisiti
-
-- **Ruby** 3.0+
-- **Rails** 7.0+
-- **PostgreSQL** 13+
-- **Docker** (per sviluppo locale)
-
-## Installazione
-
-### 1. Clona il progetto
-```bash
-git clone https://github.com/gabrielemartire/repo_plaza.git
-cd repo_plaza
-```
-
-### 2. Setup dipendenze
-```bash
-bundle install
-```
-
-### 3. Database con Docker
-```bash
-# Avvia PostgreSQL in container
-docker-compose up -d db
-
-# Setup database
-rails db:create
-rails db:migrate
-```
-
-### 4. Configurazione GitHub
-Crea un file `.env` con le tue credenziali GitHub:
-```env
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
-DATABASE_URL=postgresql://username:password@localhost:5432/repo_plaza_development
-```
-
-### 5. Setup frontend
-```bash
-rails tailwindcss:install
-```
-
-### 6. Avvia l'applicazione
-```bash
-bin/dev
-```
-
-Vai su `http://localhost:3000` per accedere all'app.
-
-## 🤝 Contribuire
-
-1. _[ALPHA] Feedback & Issue Tracker - Alpha Phase https://github.com/gabrielemartire/repo_plaza/issues/6_
-2. Fork del progetto
-3. Branch feature (`git checkout -b feature/MonitoringNpm`)
-4. Commit (`git commit -m 'Add npm package monitoring'`)
-5. Push (`git push origin feature/MonitoringNpm`)
-6. Pull Request
-
-## Licenza
-
-Progetto sotto licenza MIT - vedi `LICENSE` per dettagli.
-
-## Autore
+## Author
 
 **Gabriele Martire**
 - GitHub: [@gabrielemartire](https://github.com/gabrielemartire)
 - Portfolio: [gabrielemartire.github.io](https://gabrielemartire.github.io/)
 
-## Ringraziamenti
-
-- Open source maintainers che rendono possibile questo ecosistema
-
 ---
 
-**Walton**
-
-## DB
-
-Repo 
-Repo n-to-n Org // una repo puo essere in piu Org
-Repo n-to-n User // una repo puo essere in piu profili utenti
-Org
-Org n-to-n User // un utente puo avere piu Org
-User
-Recoveries (id_repo, id_user)
-Comment (id_repo)
-User n-to-n Comment
-
+*Named after Henry **Walton** Jones Jr. - because great adventures start with knowing what you're working with.*
