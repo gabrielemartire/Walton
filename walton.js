@@ -15,19 +15,22 @@ async function getNpmPackageInfo() {
     let arrayDeps = []
 
     try {
-        // const readPackageJSON = async () => {
-        //     const packageJsonPath = new URL('./package.json', import.meta.url).pathname
-        //     const packageJson = await fs.readFile(packageJsonPath, 'utf-8')
-        //     const packageJsonParsed = JSON.parse(packageJson)
-        //     return Object.keys(packageJsonParsed.dependencies)
-        // }
-        // const filteredDeps = await readPackageJSON().filter((dep) => !dep.startsWith('@'))
+        const readPackageJSON = async () => {
+            const packageJsonPath = new URL('./package.json', import.meta.url).pathname
+            const packageJson = await fs.readFile(packageJsonPath, 'utf-8')
+            const packageJsonParsed = JSON.parse(packageJson)
+            return Object.keys(packageJsonParsed.dependencies)
+        }
+        const filteredDeps = await readPackageJSON().filter((dep) => !dep.startsWith('@'))
 
-
+        // get dependencies from package-lock.json
         const filteredDepsMap = getDependenciesFromLockFile()
-
-        // for (const dep of filteredDeps) {   <= USE ONLY PACKAGE.JSON
         for (const dep of filteredDepsMap) {
+            // WARNING E BASTA, SONO DEPS INDIRETTE
+            // NON C'è MOLTO CHE SI PUO FARE
+        }
+
+        for (const dep of filteredDeps) {
 
             const urlBase = `https://registry.npmjs.org/${dep}`;
 
