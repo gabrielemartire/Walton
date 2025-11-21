@@ -1,27 +1,33 @@
 import fs from 'node:fs/promises'
 
+import getDependenciesFromLockFile from './dep.js'
+
 async function getNpmPackageInfo() {
+
+    console.log('╔═══════════════════════════════════════════════════════════╗');
+    console.log('║                                                           ║');
+    console.log('║                        WALTON                             ║');
+    console.log('║                                                           ║');
+    console.log('║     Excavating your node_modules for lost artifacts...    ║');
+    console.log('║                                                           ║');
+    console.log('╚═══════════════════════════════════════════════════════════╝');
+
+    let arrayDeps = []
+
     try {
-        const readPackageJSON = async () => {
-            const packageJsonPath = new URL('./package.json', import.meta.url).pathname
-            const packageJson = await fs.readFile(packageJsonPath, 'utf-8')
-            const packageJsonParsed = JSON.parse(packageJson)
-            return Object.keys(packageJsonParsed.dependencies)
-        }
-        const deps = await readPackageJSON()
+        // const readPackageJSON = async () => {
+        //     const packageJsonPath = new URL('./package.json', import.meta.url).pathname
+        //     const packageJson = await fs.readFile(packageJsonPath, 'utf-8')
+        //     const packageJsonParsed = JSON.parse(packageJson)
+        //     return Object.keys(packageJsonParsed.dependencies)
+        // }
+        // const filteredDeps = await readPackageJSON().filter((dep) => !dep.startsWith('@'))
 
-        console.log('╔═══════════════════════════════════════════════════════════╗');
-        console.log('║                                                           ║');
-        console.log('║                        WALTON                             ║');
-        console.log('║                                                           ║');
-        console.log('║     Excavating your node_modules for lost artifacts...    ║');
-        console.log('║                                                           ║');
-        console.log('╚═══════════════════════════════════════════════════════════╝');
-        console.log('Walton founds this deps', deps)
 
-        let arrayDeps = []
+        const filteredDepsMap = getDependenciesFromLockFile()
 
-        for (const dep of deps) {
+        // for (const dep of filteredDeps) {   <= USE ONLY PACKAGE.JSON
+        for (const dep of filteredDepsMap) {
 
             const urlBase = `https://registry.npmjs.org/${dep}`;
 
@@ -42,8 +48,13 @@ async function getNpmPackageInfo() {
             let forks = ''
             if (thisIsAnOldRepo) {
                 // if walton Says That Its Old we looking for a better fork
-                const { repoUrl, forksCount } = await infoRepoGithub(githubPath)
-                forks = `in '${repoUrl}' we found ${forksCount} forks`
+                try {
+                    const { repoUrl, forksCount } = await infoRepoGithub(githubPath)
+                    forks = `in '${repoUrl}' we found ${forksCount} forks`
+                } catch (err) {
+                    console.log(`Warning: Could not fetch GitHub info for ${githubPath}: ${err.message}`)
+                    forks = `GitHub info not available`
+                }
             } else {
                 forks = `Walton say it's ok`
             }
@@ -125,7 +136,7 @@ function betterData(date) {
 }
 
 function findGithubPath(url) {
-    const match = url.match(/github\.com[\/:](.+)/);
+    const match = url?.match(/github\.com[\/:](.+)/);
     /* match return: [
         'github.com/payloadcms/payload.git',
         'payloadcms/payload.git',
@@ -152,7 +163,7 @@ async function infoRepoGithub(path) {
 
     console.log('Walton is smoking...')
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    await sleep(2000); // 2 secondi
+    await sleep(300); // 0,3 secondi
 
     // TEST
     const forksUrl = `https://api.github.com/repos/${path}/forks`
@@ -248,7 +259,7 @@ function waltonSaysThatItsOld(data) {
     const differenceInMs = now - modifiedDate;
     const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
 
-    return (differenceInDays > 10) // old if data > 10days
+    return (differenceInDays > 700) // old if data > 700days
 }
 
 function calculateRating(data) {
