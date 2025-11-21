@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+
+/node_m*
+
 # Ignore all environment files (except templates).
 /.env*
 !/.env*.erb
