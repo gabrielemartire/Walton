@@ -1,6 +1,46 @@
 import fs from 'node:fs/promises'
-
 import getDependenciesFromLockFile from './dep.js'
+
+
+async function getNpmPackageLockInfo() {
+    let arrayDeps = []
+    try {
+        const filteredDepsLock = getDependenciesFromLockFile()
+        for (const dep of filteredDepsLock) {
+            const urlBase = `https://registry.npmjs.org/${dep}`;
+
+            const response = await fetch(urlBase)
+            // il fetch restituisce una promise, e usando await attendiamo la risposta
+
+            if (!response.ok) {
+                throw new Error(`Error-1 HTTP: ${response.status} - ${response.statusText}`);
+            }
+            
+            const data = await response.json()
+            // response NON contiene ancora i dati! Devo "estrarre" il body 
+            // MA il body completo potrebbe non essere ancora arrivato tutto!
+            // made this more evident
+            console.log('Thinking about:', data.name);
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+            await sleep(200); // 0,2 secondi
+
+            const info = {
+                name: data?.name || 'UNK',
+                latest: data['dist-tags'].latest, // chiave .latest
+                LastUpdate: betterData(data.time?.modified),
+                waltonSays: waltonSaysThatItsOld(data.time?.modified) ? 'old' : 'ok'
+            }
+
+            arrayDeps.push(info)
+        }
+        return arrayDeps
+
+    } catch (error) {
+        console.log('catched!')
+        throw error
+    }
+}
+
 
 async function getNpmPackageInfo() {
 
@@ -12,23 +52,16 @@ async function getNpmPackageInfo() {
     console.log('║                                                           ║');
     console.log('╚═══════════════════════════════════════════════════════════╝');
 
-    let arrayDeps = []
+   let arrayDeps = []
 
-    try {
+   try {
         const readPackageJSON = async () => {
             const packageJsonPath = new URL('./package.json', import.meta.url).pathname
             const packageJson = await fs.readFile(packageJsonPath, 'utf-8')
             const packageJsonParsed = JSON.parse(packageJson)
             return Object.keys(packageJsonParsed.dependencies)
         }
-        const filteredDeps = await readPackageJSON().filter((dep) => !dep.startsWith('@'))
-
-        // get dependencies from package-lock.json
-        const filteredDepsMap = getDependenciesFromLockFile()
-        for (const dep of filteredDepsMap) {
-            // WARNING E BASTA, SONO DEPS INDIRETTE
-            // NON C'è MOLTO CHE SI PUO FARE
-        }
+        const filteredDeps = await readPackageJSON()
 
         for (const dep of filteredDeps) {
 
@@ -45,7 +78,7 @@ async function getNpmPackageInfo() {
             // response NON contiene ancora i dati! Devo "estrarre" il body 
             // MA il body completo potrebbe non essere ancora arrivato tutto!
 
-            console.log('thinking about:', data.name);
+            console.log('Thinking about:', data.name);
             const githubPath = findGithubPath(data.repository?.url)
             const thisIsAnOldRepo = waltonSaysThatItsOld(data.time?.modified)
             let forks = ''
@@ -164,7 +197,6 @@ async function infoRepoGithub(path) {
     const repoData = await response.json()
     const forksCount = repoData.forks
 
-    console.log('Walton is smoking...')
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     await sleep(300); // 0,3 secondi
 
@@ -178,6 +210,7 @@ async function infoRepoGithub(path) {
 
     const data = await forksResponse.json() // [ {fork}, {fork}, {fork}, {fork}, {fork} ]
     let objForksInfoArray = []
+    console.log(`Analyzing ${data.length} forks...`) 
     for (const fork of data) {
         const rate = calculateRating(fork)
         if (rate > 5) {
@@ -199,8 +232,15 @@ async function infoRepoGithub(path) {
             }
             objForksInfoArray.push(objForkInfo)
         } else {
-            // bad fork
         }
+    }
+    // if we doenst find any good fork probably its still a good repo or maybe a user can create a good fork
+    if (objForksInfoArray.length === 0) {
+        console.log('No good forks found, maybe the original repo is still good!!')
+        // a link to fork the repo and a link to open an issue to suggest improvements
+        const forkLinkConsole = `https://github.com/${path}/issues/new?title=Suggestion%20New%20Fork&body=Hi`
+        console.log(`BTW You can create a fork here: ${forkLinkConsole}`)
+
     }
     // const objForkInfo = {
     //     full_name: data[0].full_name,  // eventxtra/sharp
@@ -235,24 +275,27 @@ async function infoRepoGithub(path) {
     //     license: data[1].license?.key, //": "apache-2.0",
     //     wiki: data[1].has_wiki, //": false,
     // }
-
-    console.table(objForksInfoArray, [
-        'full_name',
-        'owner',
-        'updated_at',
-        'pushed_at',
-        'rating',
-        'stars',
-        'watchers',
-        'issuesCount',
-        'forks',
-        'has_discussions',
-        'archived',
-        'disabled',
-        'license',
-        'wiki',
-    ]);
-
+    if (objForksInfoArray.length > 0) {
+        objForksInfoArray.sort((a, b) => b.rating - a.rating)
+        const topFork = objForksInfoArray[0]
+        console.log(`Walton suggests you to use the fork '${topFork.full_name}' with rating ${topFork.rating}`)
+        console.table(objForksInfoArray, [
+            'full_name',
+            'owner',
+            'updated_at',
+            'pushed_at',
+            'rating',
+            'stars',
+            'watchers',
+            'issuesCount',
+            'forks',
+            'has_discussions',
+            'archived',
+            'disabled',
+            'license',
+            'wiki',
+        ]);
+    }
     return { repoUrl, forksCount }
 }
 
@@ -289,9 +332,17 @@ function calculateRating(data) {
 
 getNpmPackageInfo()
     .then(info => {
-        console.log("====Walton's resume====")
+        console.log("=== Walton's resume ===")
         console.table(info, ['name', 'latest', 'LastUpdate', 'license', 'waltonSays']);
-        console.log('Completato con successo')
+        console.log('Successfully completed')
+    })
+    //.then(() => {
+    //    const arrayDeps = getNpmPackageLockInfo()
+    //    console.table(arrayDeps, ['name', 'latest', 'LastUpdate', 'license', 'waltonSays']);
+    //    console.log('Completato con successo')
+    //})
+    .then(() => {
+        console.log('Done')
     })
     .catch(error => {
         console.error('error', error)
