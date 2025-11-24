@@ -10,7 +10,7 @@
 Walton reads your `package.json`, fetches information from the npm registry, and for each dependency:
 
 - Checks when the package was last updated
-- Flags packages that haven't been updated in more than 10 days as "old"
+- Flags packages that haven't been updated in more than 700 days as "old"
 - For old packages, searches GitHub for active forks
 - Rates forks based on stars, watchers, issues, discussions, and more
 - Provides a summary table of your dependencies' health
@@ -107,7 +107,7 @@ Archived or disabled forks receive a rating of 0 and are filtered out.
 
 Currently, Walton uses these defaults:
 
-- **Staleness threshold**: 10 days without updates
+- **Staleness threshold**: 700 days without updates
 - **Minimum fork rating**: 5 (forks below this are filtered)
 
 *Custom configuration options coming soon!*
