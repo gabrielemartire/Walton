@@ -3,7 +3,7 @@
 
 > *"It belongs in a museum... unless it's still maintained."*
 
-**Walton** is a GitHub Action that analyzes your npm dependencies and hunts for better-maintained forks when packages go stale. Like its namesake (Indiana Jones' middle name), it digs through your project's artifacts to unearth hidden treasures.
+**Walton** is a GitHub Action that analyzes your npm dependencies and hunts for better-maintained forks when packages go stale. _It digs through your project's artifacts to unearth hidden treasures._
 
 ## What it does
 
