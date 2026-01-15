@@ -1,0 +1,21 @@
+name: Test Walton Action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test-walton:
+    runs-on: ubuntu-latest
+    name: Test Walton on itself
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Walton
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

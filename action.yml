@@ -1,0 +1,17 @@
+name: 'Walton'
+description: 'Analyze npm dependencies and find better-maintained forks for stale packages'
+author: 'gabrielemartire'
+
+branding:
+  icon: 'package'
+  color: 'purple'
+
+inputs:
+  github-token:
+    description: 'GitHub token for API requests (optional, helps avoid rate limiting)'
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
