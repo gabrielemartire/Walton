@@ -121,6 +121,9 @@ Currently, Walton uses these defaults:
 - [ ] **Output to GitHub PR comments** - Auto-comment on PRs with dependency health reports
 - [ ] **Badge generation for README** - Show dependency health status badge
 - [x] **CI/CD pipeline integration** - Fail builds when critical dependencies are stale
+
+<img width="233" height="35" alt="image" src="https://github.com/user-attachments/assets/8b292b37-1989-4008-9ac8-c271939d21ed" />
+
 - [ ] **Maintainer proposal generator** - Generate standard issue templates to propose as new maintainers
 - [ ] **Fork discovery helper** - Create links to announce official forks in original repositories
 - [ ] **Package Manager Support** `yarn.lock` and `pnpm-lock.yaml support` Analyze lock files for accurate dependency trees
