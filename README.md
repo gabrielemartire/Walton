@@ -5,6 +5,9 @@
 
 **Walton** is a GitHub Action that analyzes your npm dependencies and hunts for better-maintained forks when packages go stale. _It digs through your project's artifacts to unearth hidden treasures._
 
+![walton](https://github.com/user-attachments/assets/bf6108a6-ba43-4026-8b5d-a427efccb37a)
+
+
 ## What it does
 
 Walton reads your `package.json`, fetches information from the npm registry, and for each dependency:
