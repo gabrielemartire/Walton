@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  release:
+    types:
+      - published # pubblicazione di un rilascio
 
 jobs:
   test-walton:
