@@ -17,18 +17,18 @@ async function getNpmPackageLockInfo() {
             }
             
             const data = await response.json()
-            // response NON contiene ancora i dati! Devo "estrarre" il body 
+            // response NON contiene ancora i dati! Devo "estrarre" il body
             // MA il body completo potrebbe non essere ancora arrivato tutto!
             // made this more evident
-            console.log('Thinking about:', data.name);
+            console.log(`  → ${data.name}`);
             const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
             await sleep(200); // 0,2 secondi
 
             const info = {
                 name: data?.name || 'UNK',
                 latest: data['dist-tags'].latest, // chiave .latest
-                LastUpdate: betterData(data.time?.modified),
-                waltonSays: waltonSaysThatItsOld(data.time?.modified) ? 'old' : 'ok'
+                LastUpdate: betterDate(data.time?.modified),
+                waltonSays: isItOld(data.time?.modified) ? 'old' : 'ok'
             }
 
             arrayDeps.push(info)
@@ -51,6 +51,7 @@ async function getNpmPackageInfo() {
     console.log('║     Excavating your node_modules for lost artifacts...    ║');
     console.log('║                                                           ║');
     console.log('╚═══════════════════════════════════════════════════════════╝');
+    console.log();
 
    let arrayDeps = []
 
@@ -62,6 +63,8 @@ async function getNpmPackageInfo() {
             return Object.keys(packageJsonParsed.dependencies)
         }
         const filteredDeps = await readPackageJSON()
+
+        console.log('Analyzing Dependencies...');
 
         for (const dep of filteredDeps) {
 
@@ -78,26 +81,24 @@ async function getNpmPackageInfo() {
             // response NON contiene ancora i dati! Devo "estrarre" il body 
             // MA il body completo potrebbe non essere ancora arrivato tutto!
 
-            console.log('Thinking about:', data.name);
+            console.log(`Analyzing dependence: ${data.name}`);
             const githubPath = findGithubPath(data.repository?.url)
-            const thisIsAnOldRepo = waltonSaysThatItsOld(data.time?.modified)
-            let forks = ''
+            const thisIsAnOldRepo = isItOld(data.time?.modified)
             if (thisIsAnOldRepo) {
                 // if walton Says That Its Old we looking for a better fork
                 try {
-                    const { repoUrl, forksCount } = await infoRepoGithub(githubPath)
-                    forks = `in '${repoUrl}' we found ${forksCount} forks`
+                    const { forksCount } = await infoRepoGithub(githubPath)
+                    console.log(`${forksCount}`)
                 } catch (err) {
                     console.log(`Warning: Could not fetch GitHub info for ${githubPath}: ${err.message}`)
-                    forks = `GitHub info not available`
                 }
             } else {
-                forks = `Walton say it's ok`
+                console.log(`This repo is ok`)
             }
             const info = {
-                name: data?.name || 'UNK',
-                description: data.description,
-                latest: data['dist-tags'].latest, // chiave .latest
+                name: data?.name,
+                description: data.description?.substring(0,24) || 'No description', 
+                // NOT USED latest: data['dist-tags'].latest, // chiave .latest
                 // 'dist-tags': { latest: '0.1.1' },
                 // data-dista ha il trattino quindi non è possibile usare la notazione semplice
                 // quindi si accede al dato con data['dist-tags']
@@ -107,7 +108,7 @@ async function getNpmPackageInfo() {
                 // using Object.keys() - this method returns an array of a given object's own enumerable string-keyed property names.
                 // in this case Array ["0.1.0", "0.1.1"...]
                 // i decided to count the versions
-                mainteners: data.mainteners?.map(m => m.name || 'UNK'),
+                // NOT USED mainteners: data.mainteners?.map(m => m.name || 'UNK'),
                 // maintainers: [ { name: 'ramalho', email: 'luciano@ramalho.org' } ],
                 // .map return a new array
                 author: data?.author?.name,
@@ -116,7 +117,7 @@ async function getNpmPackageInfo() {
                 //     email: 'luciano@ramalho.org',
                 //     url: 'http://standupdev.com'
                 // },
-                LastUpdate: betterData(data.time?.modified),
+                LastUpdate: betterDate(data.time?.modified),
                 // time: {
                 //  modified: '2023-11-07T05:03:45.757Z',
                 //  created: '2011-12-28T00:43:08.254Z',
@@ -125,11 +126,9 @@ async function getNpmPackageInfo() {
                 // },
                 repo: `https://github.com/${githubPath}`,
                 // repository: { type: 'git', url: 'git://github.com/ramalho/calendar.js.git' },
-                forks: forks,
                 license: data.license,
                 // license: 'MIT',
-                waltonSays: thisIsAnOldRepo ? 'its old!' : 'its ok'
-
+                waltonSays: thisIsAnOldRepo ? 'X' : '√'
             }
             //console.log(info);
             /*{
@@ -166,7 +165,7 @@ async function getNpmPackageInfo() {
     }
 }
 
-function betterData(date) {
+function betterDate(date) {
     // make this custom
     return new Date(date).toLocaleDateString('en-US')
 }
@@ -187,6 +186,12 @@ function findGithubPath(url) {
 
 // HERE I LOOKING FOR REPO'S BETTER 5 FORKS
 async function infoRepoGithub(path) {
+    /*
+    A CHE SERVE FARE UNA CHIAMATA IN PIU' AL REPO ORIGINALE?
+    CIOE PER CAPIRE SE HA FORK, MA POSSO CAPIRE ANCHE DALLA CHIAMATA AI FORKS
+    E SE NON HA FORK ALLORA NON FACCIO NIENTE O SE I FORK TROVATI NON SONO BUONI
+    ALLROA CHIAMARE QUESTO ENDPOINT E CAPIRE LA REPO POSSA ESSERE FUNZIONANTE ANCHE SE NON HA MODIFICHE DA TEMPO
+
     const repoUrl = `https://api.github.com/repos/${path}`
     const response = await fetch(repoUrl)
 
@@ -195,12 +200,16 @@ async function infoRepoGithub(path) {
     }
 
     const repoData = await response.json()
+    
+    // QUA POTREI CAPIRE SE IL REPO ORIGINALE VA BENE
+    // console.log(repoData)
+
     const forksCount = repoData.forks
 
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     await sleep(300); // 0,3 secondi
+    */
 
-    // TEST
     const forksUrl = `https://api.github.com/repos/${path}/forks`
     const forksResponse = await fetch(forksUrl)
 
@@ -210,15 +219,15 @@ async function infoRepoGithub(path) {
 
     const data = await forksResponse.json() // [ {fork}, {fork}, {fork}, {fork}, {fork} ]
     let objForksInfoArray = []
-    console.log(`Analyzing ${data.length} forks...`) 
+    console.log(`Analyzing ${data.length} forks...`);
     for (const fork of data) {
         const rate = calculateRating(fork)
         if (rate > 5) {
             const objForkInfo = {
                 full_name: fork.full_name,  // eventxtra/sharp
                 owner: fork.owner?.login,  //eventxtra
-                updated_at: betterData(fork.updated_at), //"2025-11-12T17:59:46Z",
-                pushed_at: betterData(fork.pushed_at), //"2025-11-12T17:59:38Z",
+                updated_at: betterDate(fork.updated_at), //"2025-11-12T17:59:46Z",
+                pushed_at: betterDate(fork.pushed_at), //"2025-11-12T17:59:38Z",
                 rating: rate, //calculateRating(fork)
                 stars: fork.stargazers_count, //": 0,
                 watchers: fork.watchers_count, //": 0,
@@ -231,54 +240,24 @@ async function infoRepoGithub(path) {
                 wiki: fork.has_wiki, //": false,
             }
             objForksInfoArray.push(objForkInfo)
-        } else {
         }
     }
     // if we doenst find any good fork probably its still a good repo or maybe a user can create a good fork
+    // QUA POSSO CHIAMARE L'ENDPOINT DELLA REPO E VEDERE SE E' FUNZIONANTE O SE HA COMMENTI APERTI ECC 
     if (objForksInfoArray.length === 0) {
-        console.log('No good forks found, maybe the original repo is still good!!')
-        // a link to fork the repo and a link to open an issue to suggest improvements
-        const forkLinkConsole = `https://github.com/${path}/issues/new?title=Suggestion%20New%20Fork&body=Hi`
-        console.log(`BTW You can create a fork here: ${forkLinkConsole}`)
-
+        console.log('! No good forks found');
+        console.log('! The original repo might still be the best option');
+        console.log(`! You can suggest improvements here:`);
+        console.log(`! https://github.com/${path}/issues/new?title=Suggestion%20New%20Fork`);
     }
-    // const objForkInfo = {
-    //     full_name: data[0].full_name,  // eventxtra/sharp
-    //     owner: data[0].owner?.login,  //eventxtra
-    //     updated_at: betterData(data[0].updated_at), //"2025-11-12T17:59:46Z",
-    //     pushed_at: betterData(data[0].pushed_at), //"2025-11-12T17:59:38Z",
-    //     rating: "3", //calculateRating(data[0])
-    //     stars: data[0].stargazers_count, //": 0,
-    //     watchers: data[0].watchers_count, //": 0,
-    //     issuesCount: data[0].open_issues_count, //": 0,
-    //     forks: data[0].forks_count, //": 0,
-    //     has_discussions: data[0].has_discussions, //": false,
-    //     archived: data[0].archived, //": false,
-    //     disabled: data[0].disabled, //": false,
-    //     license: data[0].license?.key, //": "apache-2.0",
-    //     wiki: data[0].has_wiki, //": false,
-    // }
 
-    // const objForkInfo2 = {
-    //     full_name: data[1].full_name,  // eventxtra/sharp
-    //     owner: data[1].owner?.login,  //eventxtra
-    //     updated_at: betterData(data[1].updated_at), //"2025-11-12T17:59:46Z",
-    //     pushed_at: betterData(data[1].pushed_at), //"2025-11-12T17:59:38Z",
-    //     rating: "4", //calculateRating(data[0])
-    //     stars: data[1].stargazers_count, //": 0,
-    //     watchers: data[1].watchers_count, //": 0,
-    //     issuesCount: data[1].open_issues_count, //": 0,
-    //     forks: data[1].forks_count, //": 0,
-    //     has_discussions: data[1].has_discussions, //": false,
-    //     archived: data[1].archived, //": false,
-    //     disabled: data[1].disabled, //": false,
-    //     license: data[1].license?.key, //": "apache-2.0",
-    //     wiki: data[1].has_wiki, //": false,
-    // }
     if (objForksInfoArray.length > 0) {
         objForksInfoArray.sort((a, b) => b.rating - a.rating)
         const topFork = objForksInfoArray[0]
-        console.log(`Walton suggests you to use the fork '${topFork.full_name}' with rating ${topFork.rating}`)
+        console.log('! Good Forks Found');
+        console.log(`Top recommendation: ${topFork.full_name}`);
+        console.log(`Rating: ${topFork.rating}`);
+        console.log(`Check it out here:`);
         console.table(objForksInfoArray, [
             'full_name',
             'owner',
@@ -299,13 +278,13 @@ async function infoRepoGithub(path) {
     return { repoUrl, forksCount }
 }
 
-function waltonSaysThatItsOld(data) {
+function isItOld(data) {
     const modifiedDate = new Date(data);
     const now = new Date();
     const differenceInMs = now - modifiedDate;
     const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
 
-    return (differenceInDays > 700) // old if data > 700days
+    return (differenceInDays > 20) // old if data > 700days
 }
 
 function calculateRating(data) {
@@ -332,18 +311,27 @@ function calculateRating(data) {
 
 getNpmPackageInfo()
     .then(info => {
-        console.log("=== Walton's resume ===")
-        console.table(info, ['name', 'latest', 'LastUpdate', 'license', 'waltonSays']);
-        console.log('Successfully completed')
+        console.log();
+        console.log();
+        console.log('╔═══════════════════════════════════════════════════════════╗');
+        console.log('║                                                           ║');
+        console.log("║                   WALTON'S RESUME                         ║");
+        console.log('║                                                           ║');
+        console.log('╚═══════════════════════════════════════════════════════════╝');
+        console.log();
+        console.table(info, ['name', 'description', 'LastUpdate', 'versions', 'author', 'license', 'repo', 'waltonSays']);
+        console.log();
+        console.log('✅ Analysis completed successfully!');
+        console.log();
     })
     //.then(() => {
     //    const arrayDeps = getNpmPackageLockInfo()
     //    console.table(arrayDeps, ['name', 'latest', 'LastUpdate', 'license', 'waltonSays']);
     //    console.log('Completato con successo')
     //})
-    .then(() => {
-        console.log('Done')
-    })
     .catch(error => {
-        console.error('error', error)
+        console.log();
+        console.log('❌ Error occurred:');
+        console.error(error);
+        console.log();
     })
