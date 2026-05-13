@@ -150,7 +150,6 @@ MIT License - see `LICENSE` for details.
 
 **Gabriele Martire**
 - GitHub: [@gabrielemartire](https://github.com/gabrielemartire)
-- Website: [gabrielemartire.github.io](https://gabrielemartire.github.io/)
 
 ---
 
